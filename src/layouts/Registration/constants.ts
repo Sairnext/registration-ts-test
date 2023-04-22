@@ -3,4 +3,5 @@ export enum ErrorMessages {
   EMAIL_IS_NOT_CORRECT = "Email not in correct format",
   PASSWORD_IS_TOO_SHORT = "Password is too short",
   PASSWRD_DO_NOT_MATCH = "Passwords do not match",
+  USER_ALREADY_EXISTS = "User already exists",
 }

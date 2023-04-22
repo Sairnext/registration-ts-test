@@ -1,4 +1,8 @@
 import React, { FormEventHandler, useEffect, useState } from "react";
+
+import { useAppDispatch } from "../../../../store/hooks";
+import { updatePassword } from "../../../../store/userSlice";
+
 import FormBox from "../../../../components/FormBox";
 import Input from "../../../../components/Input";
 import Button from "../../../../components/Button";
@@ -21,6 +25,8 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
 
+  const dispatch = useAppDispatch();
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
@@ -29,8 +35,10 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
 
     const passwordDoMatch = Validator.equalStrings(password, confirmPassword);
 
-    if (isPasswordValid && isConfirmPasswordValid && passwordDoMatch)
+    if (isPasswordValid && isConfirmPasswordValid && passwordDoMatch) {
+      dispatch(updatePassword({ password }));
       handleNext();
+    }
 
     if (!isPasswordValid || !isConfirmPasswordValid || !passwordDoMatch) {
       const passwordError = !isPasswordValid

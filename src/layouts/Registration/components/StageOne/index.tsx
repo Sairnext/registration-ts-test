@@ -1,4 +1,7 @@
-import React, { useState, useEffect, FormEventHandler } from "react";
+import React, { FormEventHandler, useEffect, useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { createUser } from "../../../../store/userSlice";
 
 import FormBox from "../../../../components/FormBox";
 import Input from "../../../../components/Input";
@@ -22,18 +25,35 @@ const StageOne: React.FC<StageOneProps> = ({ handleNext }) => {
   const [email, setEmail] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
 
+  const users = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     const isEmailValid = Validator.isEmail(email);
     const isNameValid = Validator.minLenght(name, 3);
+    const userAlreadyExists = users.find(
+      (user) => user.name === name || user.email === email
+    );
 
-    if (isEmailValid && isNameValid) handleNext();
+    if (isEmailValid && isNameValid && !userAlreadyExists) {
+      dispatch(createUser({ name, email }));
+      handleNext();
+    }
 
     if (!isNameValid || !isEmailValid) {
       setErrors({
-        name: !isNameValid ? ErrorMessages.NAME_IS_TO_SHORT : "",
-        email: !isEmailValid ? ErrorMessages.EMAIL_IS_NOT_CORRECT : "",
+        name: !isNameValid
+          ? ErrorMessages.NAME_IS_TO_SHORT
+          : userAlreadyExists
+          ? ErrorMessages.USER_ALREADY_EXISTS
+          : "",
+        email: !isEmailValid
+          ? ErrorMessages.EMAIL_IS_NOT_CORRECT
+          : userAlreadyExists
+          ? ErrorMessages.USER_ALREADY_EXISTS
+          : "",
       });
     }
   };
