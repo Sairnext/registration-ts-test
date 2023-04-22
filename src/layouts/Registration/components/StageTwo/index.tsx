@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, { FormEventHandler, useEffect, useState, useMemo } from "react";
 
 import { useAppDispatch } from "../../../../store/hooks";
 import { updatePassword } from "../../../../store/userSlice";
@@ -7,8 +7,9 @@ import FormBox from "../../../../components/FormBox";
 import Input from "../../../../components/Input";
 import Button from "../../../../components/Button";
 
-import Validator from "../../../../utils/validate";
+import ErrorList from "../../../../components/ErrorsList";
 
+import Validator from "../../../../utils/validate";
 import { ErrorMessages } from "../../constants";
 
 type Errors = {
@@ -47,16 +48,25 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
         ? ErrorMessages.PASSWRD_DO_NOT_MATCH
         : "";
       const confirmError = !isConfirmPasswordValid
-        ? ErrorMessages.PASSWORD_IS_TOO_SHORT
-        : !passwordDoMatch
-        ? ErrorMessages.PASSWRD_DO_NOT_MATCH
+        ? ErrorMessages.CONFIRM_IS_TOO_SHORT
         : "";
+
       setErrors({
         password: passwordError,
         confirmPassword: confirmError,
       });
     }
   };
+
+  const errorsList = useMemo(() => {
+    const errorsList: string[] = [];
+    const passwordError = errors.password ? [errors.password] : [];
+    const confirmPasswordError = errors.confirmPassword
+      ? [errors.confirmPassword]
+      : [];
+
+    return errorsList.concat(passwordError).concat(confirmPasswordError);
+  }, [errors]);
 
   useEffect(() => {
     setErrors({});
@@ -70,7 +80,7 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
           type={"password"}
           value={password}
           label="Password:"
-          error={errors.password ? errors.password : ""}
+          error={errors.password}
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -78,12 +88,13 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
           type={"password"}
           value={confirmPassword}
           label="Confirm password:"
-          error={errors.password ? errors.confirmPassword : ""}
+          error={errors.password}
           placeholder="Confirm password"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <Button text="Next" type="submit" />
       </form>
+      <ErrorList errors={errorsList} />
     </FormBox>
   );
 };

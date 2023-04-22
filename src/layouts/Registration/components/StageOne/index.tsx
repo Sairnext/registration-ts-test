@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, { FormEventHandler, useEffect, useMemo, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { createUser } from "../../../../store/userSlice";
@@ -7,9 +7,10 @@ import FormBox from "../../../../components/FormBox";
 import Input from "../../../../components/Input";
 import Button from "../../../../components/Button";
 
-import { ErrorMessages } from "../../constants";
-
 import Validator from "../../../../utils/validate";
+import ErrorList from "../../../../components/ErrorsList";
+
+import { ErrorMessages } from "../../constants";
 
 type Errors = {
   email?: string;
@@ -42,21 +43,29 @@ const StageOne: React.FC<StageOneProps> = ({ handleNext }) => {
       handleNext();
     }
 
-    if (!isNameValid || !isEmailValid) {
+    if (!isNameValid || !isEmailValid || userAlreadyExists) {
       setErrors({
         name: !isNameValid
           ? ErrorMessages.NAME_IS_TO_SHORT
           : userAlreadyExists
-          ? ErrorMessages.USER_ALREADY_EXISTS
+          ? ErrorMessages.USER_NAME_EXISTS
           : "",
         email: !isEmailValid
           ? ErrorMessages.EMAIL_IS_NOT_CORRECT
           : userAlreadyExists
-          ? ErrorMessages.USER_ALREADY_EXISTS
+          ? ErrorMessages.USER_EMAIL_EXISTS
           : "",
       });
     }
   };
+
+  const errorsList = useMemo(() => {
+    const errorsList: string[] = [];
+    const passwordError = errors.name ? [errors.name] : [];
+    const confirmPasswordError = errors.email ? [errors.email] : [];
+
+    return errorsList.concat(passwordError).concat(confirmPasswordError);
+  }, [errors]);
 
   useEffect(() => {
     setErrors({});
@@ -69,19 +78,20 @@ const StageOne: React.FC<StageOneProps> = ({ handleNext }) => {
         <Input
           value={name}
           label="Name:"
-          error={errors.name ? errors.name : ""}
+          error={errors.name}
           placeholder="Name"
           onChange={(e) => setName(e.target.value)}
         />
         <Input
           value={email}
           label="Email:"
-          error={errors.email ? errors.email : ""}
+          error={errors.email}
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
         />
         <Button text="Next" type="submit" />
       </form>
+      <ErrorList errors={errorsList} />
     </FormBox>
   );
 };

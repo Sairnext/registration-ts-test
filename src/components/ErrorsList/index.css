@@ -1,0 +1,7 @@
+.error-list {
+  list-style-type: none;
+}
+
+.error-list li {
+  color: #fa7070;
+}
