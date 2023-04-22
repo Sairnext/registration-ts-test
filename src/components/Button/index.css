@@ -1,0 +1,13 @@
+.main_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+
+  font-size: 16px;
+  color: white;
+  background-color: #5b8cf0;
+}

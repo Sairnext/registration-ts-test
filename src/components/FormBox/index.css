@@ -1,0 +1,10 @@
+.box_wrapper {
+  display: flex;
+  flex-direction: column;
+
+  padding: 16px;
+
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
