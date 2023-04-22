@@ -1,9 +1,11 @@
 import React, { ChangeEventHandler } from "react";
 
+import "./index.css";
+
 interface InputProps {
   label: string;
   value: string;
-  placeholder: string;
+  placeholder?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }
 

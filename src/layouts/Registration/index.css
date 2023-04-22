@@ -1,0 +1,15 @@
+.registration_page {
+    height: 100vh;
+    width: 100vw;
+
+    background: linear-gradient(to right top, #09adea, #b822ff);
+}
+
+.header {
+    font-size: 20px;
+    font-weight: bold;
+    color: #3b3b3b;
+
+    margin-bottom: 16px;
+    text-align: center;
+}

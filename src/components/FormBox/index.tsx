@@ -1,5 +1,7 @@
 import React, { ReactElement } from "react";
 
+import "./index.css";
+
 interface FormBoxProps {
   children: ReactElement | ReactElement[];
 }
