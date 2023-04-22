@@ -77,17 +77,17 @@ const StageTwo: React.FC<StageTwoProps> = ({ handleNext }) => {
       <form onSubmit={handleSubmit}>
         <h3>Register</h3>
         <Input
-          type={"password"}
-          value={password}
+          type="password"
           label="Password:"
+          value={password}
           error={errors.password}
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
         <Input
-          type={"password"}
-          value={confirmPassword}
+          type="password"
           label="Confirm password:"
+          value={confirmPassword}
           error={errors.password}
           placeholder="Confirm password"
           onChange={(e) => setConfirmPassword(e.target.value)}
